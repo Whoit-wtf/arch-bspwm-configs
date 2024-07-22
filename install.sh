@@ -24,13 +24,20 @@ date=$(date +%Y%m%d-%H%M%S)
 
 home_dir=$HOME
 
+#Ставим русскую локаль
+echo "Устанавливаю русскую локаль"
+sudo sed -i 's/#ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen
+sudo locale-gen
+localectl set-locale LANG="ru_RU.UTF-8"
+
+sudo echo "setfont cyr-sun16" > /etc/profile.d/rus.sh
+
 #Очищаем кеш и обновляем зеркала
 sudo sed -i 's/^#\[multilib\]/[multilib]/' /etc/pacman.conf
 sudo sed -i '/^\[multilib\]$/,/^\[/ s/^#\(Include = \/etc\/pacman\.d\/mirrorlist\)/\1/' /etc/pacman.conf
 sudo pacman -Sy
 sudo pacman -Scc
 sudo pacman -Syy
-
 
 #Список пакетов
 PACKAGES="sxhkd bspwm tumbler ffmpegthumbnailer lsd alacritty bat brightnessctl calc \
@@ -86,17 +93,12 @@ sudo cp -r $script_dir/shikai /usr/share/web-greeter/themes/
 #timeout 10 firefox --headless
 #sh $script_dir/firefox/install.sh
 
+
 #Создаем домашние папки
 echo Создаю домашние папки...
 if [ ! -e "$HOME/.config/user-dirs.dirs" ]; then
     xdg-user-dirs-update
 fi
-
-#Ставим русскую локаль
-echo "Устанавливаю русскую локаль"
-sudo sed -i 's/#ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen
-sudo locale-gen
-localectl set-locale LANG="ru_RU.UTF-8"
 
 #Копирование конфигов
 echo Копирую конфиги...
@@ -116,4 +118,5 @@ sudo chmod -R +x ~/bin/*
 
 sudo systemctl enable NetworkManager
 sudo systemctl enable bluetooth.service
+sudo systemctl enable lightdm.service
 sudo systemctl start bluetooth.service
