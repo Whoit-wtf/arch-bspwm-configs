@@ -93,6 +93,10 @@ sudo cp -r $script_dir/shikai /usr/share/web-greeter/themes/
 #timeout 10 firefox --headless
 #sh $script_dir/firefox/install.sh
 
+#Ставим i3lock-color
+echo Ставлю i3lock-color...
+git clone https://github.com/Raymo111/i3lock-color.git
+cd i3lock-color && ./install-i3lock-color.sh
 
 #Создаем домашние папки
 echo Создаю домашние папки...
