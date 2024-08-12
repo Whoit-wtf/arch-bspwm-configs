@@ -30,7 +30,7 @@ sudo sed -i 's/#ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen
 sudo locale-gen
 localectl set-locale LANG="ru_RU.UTF-8"
 
-sudo echo "setfont cyr-sun16" > /etc/profile.d/rus.sh
+echo "setfont cyr-sun16" | sudo tee /etc/profile.d/run.sh
 
 #Очищаем кеш и обновляем зеркала
 sudo sed -i 's/^#\[multilib\]/[multilib]/' /etc/pacman.conf
@@ -38,6 +38,9 @@ sudo sed -i '/^\[multilib\]$/,/^\[/ s/^#\(Include = \/etc\/pacman\.d\/mirrorlist
 sudo pacman -Sy
 sudo pacman -Scc
 sudo pacman -Syy
+
+#Ускоряем pacman
+sudo sed -i 's/#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
 
 #Список пакетов
 PACKAGES="sxhkd bspwm tumbler ffmpegthumbnailer lsd alacritty bat brightnessctl calc \
@@ -53,14 +56,11 @@ PACKAGES="sxhkd bspwm tumbler ffmpegthumbnailer lsd alacritty bat brightnessctl 
     p7zip gparted sshfs openvpn xclip gpick wget ueberzug netctl libreoffice \
     breeze vulkan-intel intel-ucode ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-fira-code \
     ttf-iosevka-nerd xdg-user-dirs mesa lib32-mesa xf86-video-nouveau xf86-video-intel vulkan-intel \
-    xorg xorg-xinit"
+    xorg xorg-xinit dos2unix"
  
 AUR_PACKAGES="cava light web-greeter"
 ##i3lock-color ptpython
 #GNOME_PACKAGES="evince gnome-calculator gnome-disk-utility gucharmap gthumb gnome-clocks"
-
-#Ускоряем pacman
-sudo sed -i 's/#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
 
 echo Устанавливаю пакеты...
 if sudo pacman -Sy $PACKAGES; then
@@ -119,6 +119,12 @@ cp -r $script_dir/bin/ ~/
 #Выставляем права
 sudo chmod -R 700 ~/.config/*
 sudo chmod -R +x ~/bin/*
+
+#УБираем dos символы, если они есть
+find ~/.config/ -type f -print0 | xargs -0 dos2unix > /dev/null 2>&1
+dos2unix ~/.Xresources > /dev/null 2>&1
+dos2unix ~/.gtkrc-2.0> /dev/null 2>&1
+dos2unix ~/.xinitrc > /dev/null 2>&1
 
 sudo systemctl enable NetworkManager
 sudo systemctl enable bluetooth.service
