@@ -24,6 +24,15 @@ date=$(date +%Y%m%d-%H%M%S)
 
 home_dir=$HOME
 
+#Что ставить
+read -rp "Install Linux Kernel LTS ? (y/n): " KERNEL_ANSW
+
+#Ставим LTS ядро
+if [[ "KERNEL_ANSW" == "y" || "KERNEL_ANSW" == "Y" ]]; then
+  sudo pacman -S linux-lts linux-lts-headers nvidia-lts
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+fi
+
 #Ставим русскую локаль
 echo "Устанавливаю русскую локаль"
 sudo sed -i 's/#ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen
