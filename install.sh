@@ -132,7 +132,7 @@ sudo chmod -R +x ~/bin/*
 #УБираем dos символы, если они есть
 find ~/.config/ -type f -print0 | xargs -0 dos2unix > /dev/null 2>&1
 dos2unix ~/.Xresources > /dev/null 2>&1
-dos2unix ~/.gtkrc-2.0> /dev/null 2>&1
+dos2unix ~/.gtkrc-2.0 > /dev/null 2>&1
 dos2unix ~/.xinitrc > /dev/null 2>&1
 
 sudo systemctl enable NetworkManager
