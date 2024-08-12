@@ -24,9 +24,6 @@ date=$(date +%Y%m%d-%H%M%S)
 
 home_dir=$HOME
 
-#УБираем dos символы, если они есть
-find $script_dir -type f -print0 | xargs -0 dos2unix > /dev/null 2>&1
-
 #Что ставить
 read -rp "Install Linux Kernel LTS ? (y/n): " KERNEL_ANSW
 
@@ -92,6 +89,9 @@ cd /tmp/yay && makepkg -si
 #Ставим yay пакеты
 echo Устанавливаю yay пакеты...
 yay -S $AUR_PACKAGES
+
+#УБираем dos символы, если они есть
+find $script_dir -type f -print0 | xargs -0 dos2unix > /dev/null 2>&1
 
 #Устанавливаем LightDm тему
 echo Устанавливаю LightDm тему...
