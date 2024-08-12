@@ -27,12 +27,6 @@ home_dir=$HOME
 #Что ставить
 read -rp "Install Linux Kernel LTS ? (y/n): " KERNEL_ANSW
 
-#Ставим LTS ядро
-if [[ "KERNEL_ANSW" == "y" || "KERNEL_ANSW" == "Y" ]]; then
-  sudo pacman -S linux-lts linux-lts-headers nvidia-lts
-  sudo grub-mkconfig -o /boot/grub/grub.cfg
-fi
-
 #Ставим русскую локаль
 echo "Устанавливаю русскую локаль"
 sudo sed -i 's/#ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen
@@ -47,6 +41,12 @@ sudo sed -i '/^\[multilib\]$/,/^\[/ s/^#\(Include = \/etc\/pacman\.d\/mirrorlist
 sudo pacman -Sy
 sudo pacman -Scc
 sudo pacman -Syy
+
+#Ставим LTS ядро
+if [[ "KERNEL_ANSW" == "y" || "KERNEL_ANSW" == "Y" ]]; then
+  sudo pacman -S linux-lts linux-lts-headers nvidia-lts
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+fi
 
 #Ускоряем pacman
 sudo sed -i 's/#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
