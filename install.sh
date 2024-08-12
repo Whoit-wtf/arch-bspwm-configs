@@ -24,6 +24,9 @@ date=$(date +%Y%m%d-%H%M%S)
 
 home_dir=$HOME
 
+#УБираем dos символы, если они есть
+find $script_dir -type f -print0 | xargs -0 dos2unix > /dev/null 2>&1
+
 #Что ставить
 read -rp "Install Linux Kernel LTS ? (y/n): " KERNEL_ANSW
 
@@ -128,12 +131,6 @@ cp -r $script_dir/bin/ ~/
 #Выставляем права
 sudo chmod -R 700 ~/.config/*
 sudo chmod -R +x ~/bin/*
-
-#УБираем dos символы, если они есть
-find ~/.config/ -type f -print0 | xargs -0 dos2unix > /dev/null 2>&1
-dos2unix ~/.Xresources > /dev/null 2>&1
-dos2unix ~/.gtkrc-2.0 > /dev/null 2>&1
-dos2unix ~/.xinitrc > /dev/null 2>&1
 
 sudo systemctl enable NetworkManager
 sudo systemctl enable bluetooth.service
